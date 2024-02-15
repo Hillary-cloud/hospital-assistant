@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreatePaymentsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('payments', function (Blueprint $table) {
+            $table->string('reference_number');
+            $table->decimal('amount', 10, 2);
+            $table->string('payment_for'); // Assuming this column exists
+            $table->unsignedBigInteger('consultation_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+    
+            $table->foreign('consultation_id')->references('id')->on('consultations')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('payments');
+    }
+}
